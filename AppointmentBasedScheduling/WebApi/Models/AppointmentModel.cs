@@ -1,4 +1,6 @@
-﻿namespace WebApi.Models
+﻿using WebApi.Models.AppointmentDetails;
+
+namespace WebApi.Models
 {
     public class AppointmentModel
     {
