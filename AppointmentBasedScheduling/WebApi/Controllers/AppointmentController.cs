@@ -8,23 +8,23 @@ namespace WebApi.Controllers
     [ApiController]
     public class AppointmentController : ControllerBase
     {
-        private readonly IAppointmentData _appontmentData;
+        private readonly IAppointmentData _appointmentData;
 
-        public AppointmentController(IAppointmentData appontmentData)
+        public AppointmentController(IAppointmentData appointmentData)
         {
-            _appontmentData = appontmentData;
+            _appointmentData = appointmentData;
         }
 
         [HttpGet]
         public List<AppointmentModel> Get()
         {
-            return _appontmentData.GetAppointment();
+            return _appointmentData.GetAppointment();
         }
 
         [HttpPost]
         public void Post(AppointmentModel appointment)
         {
-            _appontmentData.SaveInventoryRecord(appointment);
+            _appointmentData.SaveInventoryRecord(appointment);
         }
     }
 }
