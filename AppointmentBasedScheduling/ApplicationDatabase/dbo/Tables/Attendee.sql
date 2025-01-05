@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Attendee]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[UserId] NVARCHAR(128),
+	[FirstName] NVARCHAR(50) NOT NULL,
+	[LastName] NVARCHAR(50) NOT NULL,
+	[Email] NVARCHAR(256) NOT NULL,
+	[IsRegistered] BIT NOT NULL DEFAULT 1, 
+    CONSTRAINT [FK_Attendee_ToUser] FOREIGN KEY (UserId) REFERENCES [User](Id)
+)
