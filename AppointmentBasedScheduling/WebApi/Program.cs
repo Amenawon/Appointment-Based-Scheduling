@@ -1,4 +1,8 @@
+using WebApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
