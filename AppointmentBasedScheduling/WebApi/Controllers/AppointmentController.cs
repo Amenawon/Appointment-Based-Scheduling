@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Data;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -8,23 +9,23 @@ namespace WebApi.Controllers
     [ApiController]
     public class AppointmentController : ControllerBase
     {
-        private readonly IAppointmentData _appointmentData;
+        private readonly AppointmentRepository _appointmentData;
 
-        public AppointmentController(IAppointmentData appointmentData)
+        public AppointmentController(AppointmentRepository appointmentData)
         {
             _appointmentData = appointmentData;
         }
 
         [HttpGet]
-        public List<AppointmentModel> Get()
+        public async Task<Appointment> Get(int id)
         {
-            return _appointmentData.GetAppointment();
+            return await _appointmentData.GetAppointmentByIdAsync(id);
         }
 
         [HttpPost]
-        public void Post(AppointmentModel appointment)
+        public async Task Post(Appointment appointment)
         {
-            _appointmentData.SaveInventoryRecord(appointment);
+            await _appointmentData.AddAppointmentAsync(appointment);
         }
     }
 }
