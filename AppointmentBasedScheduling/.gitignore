@@ -47,6 +47,8 @@ x64/
 .builds
 *.pidb
 *.scc
+*.jfm
+appsettings.json
 
 # Visual C++ cache files
 ipch/
