@@ -2,7 +2,7 @@
 
 namespace WebApi.Models
 {
-    public class AppointmentModel
+    public class Appointment
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -11,9 +11,9 @@ namespace WebApi.Models
         public TimeSpan Duration { get; set; }
         public string Location { get; set; }
         public Status Status { get; set; }
-        public List<AttendeeModel> Attendees { get; set; }
+        public List<Attendee> Attendees { get; set; }
 
-        public UserModel CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public User Organiser { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }
