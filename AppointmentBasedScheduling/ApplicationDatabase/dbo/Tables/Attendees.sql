@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Attendee]
+﻿CREATE TABLE [dbo].[Attendees]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[UserId] NVARCHAR(128),
@@ -6,5 +6,5 @@
 	[LastName] NVARCHAR(50) NOT NULL,
 	[Email] NVARCHAR(256) NOT NULL,
 	[IsRegistered] BIT NOT NULL DEFAULT 1, 
-    CONSTRAINT [FK_Attendee_ToUser] FOREIGN KEY (UserId) REFERENCES [User](Id)
+    CONSTRAINT [FK_Attendees_ToUsers] FOREIGN KEY (UserId) REFERENCES Users(Id)
 )

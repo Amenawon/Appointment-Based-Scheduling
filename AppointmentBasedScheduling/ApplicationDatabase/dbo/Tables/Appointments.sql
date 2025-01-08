@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Appointment]
+﻿CREATE TABLE [dbo].[Appointments]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[Title] NVARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@
 	[Attendees] INT NOT NULL,
 	[Organiser] NVARCHAR(128) NOT NULL,
 	[CreateDate] DATETIME2 NOT NULL DEFAULT getutcdate(), 
-    CONSTRAINT [FK_Appointment_ToUser] FOREIGN KEY (Organiser) REFERENCES [User](Id), 
-    CONSTRAINT [FK_Appointment_ToAttendee] FOREIGN KEY (Attendees) REFERENCES Attendee(Id)
+    CONSTRAINT [FK_Appointments_ToUsers] FOREIGN KEY (Organiser) REFERENCES Users(Id), 
+    CONSTRAINT [FK_Appointments_ToAttendees] FOREIGN KEY (Attendees) REFERENCES Attendees(Id)
 
 )
