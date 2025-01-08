@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
 
 namespace WebApi.Data
 {
@@ -9,5 +10,8 @@ namespace WebApi.Data
             : base(options)
         {
         }
+
+        public DbSet<Appointment> Appointments { get; set; }
+
     }
 }
