@@ -13,7 +13,7 @@ namespace WebApi.Models
         public Status Status { get; set; }
         public List<Attendee> Attendees { get; set; }
 
-        public User Organiser { get; set; }
+        public string OrganiserId { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }
