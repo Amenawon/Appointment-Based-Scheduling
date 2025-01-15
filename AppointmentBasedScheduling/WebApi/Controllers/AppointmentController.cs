@@ -23,9 +23,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task Post(Appointment appointment)
+        public async Task<IActionResult> Post([FromBody] Appointment appointment)
         {
             await _appointmentData.AddAppointmentAsync(appointment);
+
+            return Ok("Appointment created successfully.");
         }
     }
 }
