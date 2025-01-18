@@ -10,7 +10,7 @@ namespace WebApi.Models
         public DateTime Date { get; set; }
         public int Duration { get; set; }
         public string Location { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
         public int Attendees { get; set; }
 
         public string OrganiserId { get; set; }

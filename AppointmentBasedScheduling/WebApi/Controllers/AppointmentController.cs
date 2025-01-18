@@ -16,10 +16,17 @@ namespace WebApi.Controllers
             _appointmentData = appointmentData;
         }
 
-        [HttpGet]
+
+        [HttpGet("{id}")]
         public async Task<Appointment> Get(int id)
         {
             return await _appointmentData.GetAppointmentByIdAsync(id);
+        }
+
+        [HttpGet]
+        public async Task<List<Appointment>> Get()
+        {
+            return await _appointmentData.GetAppointmentsAsync();
         }
 
         [HttpPost]
