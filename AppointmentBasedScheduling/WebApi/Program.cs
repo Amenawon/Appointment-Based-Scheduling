@@ -1,6 +1,7 @@
 using WebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,17 @@ builder.Services.AddScoped<AppointmentRepository>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSwaggerGen(setup =>
+{
+    setup.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title = "Appointment Scheduling",
+            Version = "v1"
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +47,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(x =>
+{
+    x.SwaggerEndpoint("/swagger/v1/swagger.json", "Appointment Scheduling v1");
+});
 
 app.MapControllerRoute(
     name: "default",
