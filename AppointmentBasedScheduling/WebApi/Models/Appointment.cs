@@ -11,9 +11,8 @@ namespace WebApi.Models
         public int Duration { get; set; }
         public string Location { get; set; }
         public string Status { get; set; }
-        public int Attendees { get; set; }
-
         public string OrganiserId { get; set; }
         public DateTime CreateDate { get; set; }
+        public List<AppointmentUser> AppointmentUsers { get; set; }
     }
 }

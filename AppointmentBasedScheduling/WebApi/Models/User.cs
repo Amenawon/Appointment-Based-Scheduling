@@ -8,5 +8,6 @@
         public string Email { get; set; }
         public string? Organisation { get; set; }
         public DateTime CreateDate { get; set; }
+        public List<AppointmentUser> AppointmentUsers { get; set; }
     }
 }
