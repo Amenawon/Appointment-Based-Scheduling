@@ -16,6 +16,7 @@ builder.Services.AddControllers()
                 });
 
 builder.Services.AddScoped<AppointmentRepository>();
+builder.Services.AddScoped<AppointmentUserRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
