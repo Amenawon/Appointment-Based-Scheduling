@@ -12,7 +12,7 @@ namespace WebApi.Models
         public string Location { get; set; }
         public string Status { get; set; }
         public string OrganiserId { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public List<AppointmentUser> AppointmentUsers { get; set; }
     }
 }
