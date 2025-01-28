@@ -25,7 +25,9 @@ namespace WebApi.Data
 
         public async Task<Appointment> GetAppointmentByIdAsync(int id)
         {
-            return await _context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
+            return await _context.Appointments
+                .Include(a => a.AppointmentUsers)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
 }
