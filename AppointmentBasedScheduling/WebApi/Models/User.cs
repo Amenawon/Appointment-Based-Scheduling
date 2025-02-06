@@ -7,7 +7,7 @@ namespace WebApi.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? Organisation { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public List<AppointmentUser> AppointmentUsers { get; set; }
     }
 }
