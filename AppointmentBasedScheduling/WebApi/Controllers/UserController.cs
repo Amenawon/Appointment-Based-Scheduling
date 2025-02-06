@@ -43,5 +43,33 @@ namespace WebApi.Controllers
 
             return BadRequest(result.Errors);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(loginUserModel.Email, loginUserModel.Password, false, false);
+            if (result.Succeeded)
+            {
+                return Ok("Login Successfull!");
+            }
+            return Unauthorized("Invalid credentials!");
+        }
+
+        [HttpGet("getCurrentUser")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(user);
+        }
     }
 }
