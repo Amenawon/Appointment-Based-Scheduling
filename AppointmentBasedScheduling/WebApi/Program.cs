@@ -1,9 +1,12 @@
 using WebApi.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using WebApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,24 @@ builder.Services.AddControllers()
 
 builder.Services.AddScoped<AppointmentRepository>();
 builder.Services.AddScoped<AppointmentUserRepository>();
+
+// Configure JWT Authentication
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SecretKey"]);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
