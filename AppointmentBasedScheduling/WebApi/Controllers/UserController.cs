@@ -54,21 +54,6 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
         {
-            /*if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _signInManager.PasswordSignInAsync(loginUserModel.Email, loginUserModel.Password, false, false);
-            if (!result.Succeeded)
-            {
-                return Unauthorized("Invalid credentials!");
-            }
-
-            // Create JWT token if credentials are valid
-            var token = GenerateJwtToken(user);
-            return Ok(new { token });*/
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -91,7 +76,7 @@ namespace WebApi.Controllers
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
             new Claim(ClaimTypes.Email, user.Email),
         };
 
@@ -113,13 +98,28 @@ namespace WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Invalid token: User ID not found.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
-            return Ok(user);
+            return Ok(new
+            {
+                user.Id,
+                user.UserName,
+                user.Email,
+                user.FirstName,
+                user.LastName
+            });
         }
+
+        
     }
 }
