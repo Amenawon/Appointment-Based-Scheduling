@@ -120,6 +120,21 @@ namespace WebApi.Controllers
             });
         }
 
+
+        public async Task<IActionResult> AssignRole([FromBody] UserRolePairModel userRolePairModel)
+        {
+            var user = await _userManager.FindByIdAsync(userRolePairModel.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            var result = await _userManager.AddToRoleAsync(user, userRolePairModel.RoleName);
+            if (result.Succeeded)
+            {
+                return Ok("Role assigned successfully");
+            }
+            return BadRequest(result.Errors);
+        }
         
     }
 }
