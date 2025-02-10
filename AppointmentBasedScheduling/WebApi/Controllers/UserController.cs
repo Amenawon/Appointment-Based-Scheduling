@@ -120,7 +120,8 @@ namespace WebApi.Controllers
             });
         }
 
-
+        [HttpPost("assignRole")]
+        [Authorize]
         public async Task<IActionResult> AssignRole([FromBody] UserRolePairModel userRolePairModel)
         {
             var user = await _userManager.FindByIdAsync(userRolePairModel.UserId);
