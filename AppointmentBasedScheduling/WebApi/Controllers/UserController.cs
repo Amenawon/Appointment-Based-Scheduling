@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApi.Data;
 using WebApi.Models;
 using WebApi.Models.DTOs;
 
@@ -17,12 +19,17 @@ namespace WebApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserController(UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("register")]
@@ -118,6 +125,22 @@ namespace WebApi.Controllers
                 user.FirstName,
                 user.LastName
             });
+        }
+
+        [HttpGet("getAllUsers")]
+        [Authorize]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = _userManager.Users.ToList();
+            
+            var usersList = users.Select(user => new
+            {
+                user.Id,
+                user.UserName,
+                user.Email,
+            }).ToList();
+
+            return Ok(usersList);
         }
 
         [HttpPost("assignRole")]
