@@ -59,6 +59,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
         {
             if (!ModelState.IsValid)
@@ -102,7 +103,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getCurrentUser")]
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetCurrentUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -128,7 +129,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getAllUsers")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = _userManager.Users.ToList();
@@ -144,7 +145,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("assignRole")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignRole([FromBody] UserRolePairModel userRolePairModel)
         {
             var user = await _userManager.FindByIdAsync(userRolePairModel.UserId);
