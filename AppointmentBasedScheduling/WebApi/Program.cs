@@ -7,7 +7,6 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using WebApi.Models;
 using System.Text;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +46,8 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
-        //RoleClaimType = ClaimTypes.Role
     };
 });
-
-//builder.Services.AddAuthorization();
 
 
 // Add services to the container.

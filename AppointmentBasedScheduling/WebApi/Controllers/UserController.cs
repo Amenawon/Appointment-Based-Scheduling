@@ -59,6 +59,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
         {
             if (!ModelState.IsValid)
@@ -78,7 +79,7 @@ namespace WebApi.Controllers
             return Ok(new { token });
         }
 
-        private async Task<string> GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user)
         {
             var claims = new List<Claim>
         {
@@ -86,13 +87,6 @@ namespace WebApi.Controllers
             new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
             new Claim(ClaimTypes.Email, user.Email),
         };
-
-            // Add roles to JWT
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));  
-            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -166,23 +160,6 @@ namespace WebApi.Controllers
             }
             return BadRequest(result.Errors);
         }
-
-        [HttpGet("userRole")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetUserRole([FromRoute] UserRolePairModel userRolePairModel)
-        {
-            var user = await _userManager.FindByIdAsync(userRolePairModel.UserId);
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
-            var result = await _userManager.AddToRoleAsync(user, userRolePairModel.RoleName);
-            if (result.Succeeded)
-            {
-                return Ok("Role assigned successfully");
-            }
-            return BadRequest(result.Errors);
-        }
-
+        
     }
 }
