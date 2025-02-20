@@ -59,7 +59,6 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
         {
             if (!ModelState.IsValid)
