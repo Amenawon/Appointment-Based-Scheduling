@@ -19,17 +19,17 @@ namespace WebApi.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserController(UserManager<User> userManager, 
             SignInManager<User> signInManager, 
             IConfiguration configuration,
-            ApplicationDbContext context)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            _context = context;
+            _roleManager = roleManager;
         }
 
         [HttpPost("register")]
@@ -133,7 +133,7 @@ namespace WebApi.Controllers
             });
         }
 
-        [HttpGet("getAllUsers")]
+        [HttpGet("admin/getAllUsers")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -149,7 +149,7 @@ namespace WebApi.Controllers
             return Ok(usersList);
         }
 
-        [HttpPost("assignRole")]
+        [HttpPost("admin/assignRole")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignRole([FromBody] UserRolePairModel userRolePairModel)
         {
@@ -165,6 +165,16 @@ namespace WebApi.Controllers
             }
             return BadRequest(result.Errors);
         }
-        
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("admin/getAllRoles")]
+        public IActionResult GetAllRoles()
+        {
+            var roles = _roleManager.Roles.Select(r => new { r.Id, r.Name }).ToList();
+
+            return Ok(roles);
+        }
+
     }
 }
