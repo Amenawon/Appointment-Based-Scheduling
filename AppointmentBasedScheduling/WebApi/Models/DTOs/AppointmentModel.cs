@@ -9,6 +9,6 @@
         public string Location { get; set; }
         public string Status { get; set; }
         public string OrganiserEmail { get; set; }
-        public List<string> ListAttendeesEmails { get; set; }
+        public List<AppointmentUserModel> ListAttendees { get; set; }
     }
 }
