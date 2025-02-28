@@ -49,8 +49,9 @@ namespace WebApi.Controllers
                 Organisation = userRegisterModel.Organisation
             };
             var result = await _userManager.CreateAsync(user, userRegisterModel.Password);
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
-            if (result.Succeeded)
+            if (result.Succeeded && roleResult.Succeeded)
             {
                 return Ok("New user registered successfully!");
             }
