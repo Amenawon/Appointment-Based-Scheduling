@@ -28,6 +28,7 @@ namespace WebApi.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<Appointment> Get(int id)
         {
             return await _appointmentData.GetAppointmentByIdAsync(id);
@@ -40,6 +41,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Post([FromBody] AppointmentModel appointmentDto)
         {
 
