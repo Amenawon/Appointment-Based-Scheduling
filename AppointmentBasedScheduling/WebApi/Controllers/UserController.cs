@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
@@ -124,13 +125,20 @@ namespace WebApi.Controllers
                 return NotFound("User not found.");
             }
 
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles == null)
+            {
+                return NotFound("User Roles not found.");
+            }
+
             return Ok(new
             {
                 user.Id,
                 user.UserName,
                 user.Email,
                 user.FirstName,
-                user.LastName
+                user.LastName,
+                Roles = userRoles
             });
         }
 
