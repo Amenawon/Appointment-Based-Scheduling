@@ -35,7 +35,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Appointment>> Get()
+        public async Task<List<Appointment>> GetAllUserAppointments()
         {
             return await _appointmentData.GetAppointmentsAsync();
         }

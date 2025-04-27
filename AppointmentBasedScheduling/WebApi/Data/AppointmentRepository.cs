@@ -20,7 +20,9 @@ namespace WebApi.Data
 
         public async Task<List<Appointment>> GetAppointmentsAsync()
         {
-            return await _context.Appointments.ToListAsync();
+            return await _context.Appointments
+                .Include(a => a.AppointmentUsers)
+                .ToListAsync();
         }
 
         public async Task<Appointment> GetAppointmentByIdAsync(int id)
