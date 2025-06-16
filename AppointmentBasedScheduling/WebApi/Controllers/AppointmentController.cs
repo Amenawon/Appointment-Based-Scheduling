@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, User")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Post([FromBody] AppointmentModel appointmentDto)
         {
 
@@ -64,18 +64,45 @@ namespace WebApi.Controllers
 
             await _appointmentData.AddAppointmentAsync(appointment);
 
-            List<AppointmentUser> attendeesList = new List<AppointmentUser>();
             foreach (AppointmentUserModel attendeeDto in appointmentDto.ListAttendees)
             {
+                var appointmentUser = new AppointmentUser();
                 var attendee = await _userManager.FindByEmailAsync(attendeeDto.AttendeeEmail);
 
-                var appointmentUser = new AppointmentUser
+                if (attendee is not null)
                 {
-                    AppointmentId = appointment.Id,
-                    UserId = attendee.Id,
-                    Role = attendeeDto.Role,
-                    RsvpStatus = attendeeDto.RsvpStatus
-                };
+                    appointmentUser = new AppointmentUser
+                    {
+                        AppointmentId = appointment.Id,
+                        UserId = attendee.Id,
+                        Role = attendeeDto.Role,
+                        RsvpStatus = attendeeDto.RsvpStatus
+                    };
+                }
+                else
+                {
+                    var placeholderUser = new User
+                    {
+                        UserName = "Unknown",
+                        Email = attendeeDto.AttendeeEmail,
+                        FirstName = "Unknown",
+                        LastName = "Unknown",
+                        Organisation = "Unknown",
+                        IsPlaceholder = true
+                    };
+
+                    await _userManager.CreateAsync(placeholderUser);
+                    var attendeeUserId = placeholderUser.Id;
+
+                    appointmentUser = new AppointmentUser
+                    {
+                        AppointmentId = appointment.Id,
+                        UserId = attendeeUserId,
+                        Role = attendeeDto.Role,
+                        RsvpStatus = attendeeDto.RsvpStatus
+                    };
+                }
+
                 await _appointmentUserData.AddAppointmentUserAsync(appointmentUser);
             }
 
