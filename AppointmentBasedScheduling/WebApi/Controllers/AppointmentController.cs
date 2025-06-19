@@ -51,11 +51,13 @@ namespace WebApi.Controllers
                 return NotFound("OrganiserId not found.");
             }
 
+            var dateDatetime = DateTime.Parse(appointmentDto.Date);
+
             var appointment = new Appointment
             {
                 Title = appointmentDto.Title,
                 Description = appointmentDto.Description,
-                Date = appointmentDto.Date,
+                Date = dateDatetime,
                 Duration = appointmentDto.Duration,
                 Location = appointmentDto.Location,
                 Status = appointmentDto.Status,
@@ -83,7 +85,7 @@ namespace WebApi.Controllers
                 {
                     var placeholderUser = new User
                     {
-                        UserName = "Unknown",
+                        UserName = attendeeDto.AttendeeEmail,
                         Email = attendeeDto.AttendeeEmail,
                         FirstName = "Unknown",
                         LastName = "Unknown",
@@ -91,9 +93,14 @@ namespace WebApi.Controllers
                         IsPlaceholder = true
                     };
 
-                    await _userManager.CreateAsync(placeholderUser);
+                    var result = await _userManager.CreateAsync(placeholderUser);
+                    if (!result.Succeeded)
+                    {
+                        var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                        throw new InvalidOperationException($"Failed to create placeholder user: {errorMessages}");
+                    }
+                    
                     var attendeeUserId = placeholderUser.Id;
-
                     appointmentUser = new AppointmentUser
                     {
                         AppointmentId = appointment.Id,
