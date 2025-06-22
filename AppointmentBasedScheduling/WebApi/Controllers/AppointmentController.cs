@@ -60,7 +60,7 @@ namespace WebApi.Controllers
                 Date = dateDatetime,
                 Duration = appointmentDto.Duration,
                 Location = appointmentDto.Location,
-                Status = appointmentDto.Status,
+                Status = Status.Scheduled,
                 OrganiserId = user.Id
             };
 
