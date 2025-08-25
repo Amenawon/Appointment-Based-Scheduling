@@ -46,8 +46,29 @@ namespace WebApi.Controllers
         {
 
             var user = await _userManager.FindByEmailAsync(appointmentDto.OrganiserEmail);
-            if (user == null)
+            if (user == null && appointmentDto.isGuest)
             {
+                var placeholderUser = new User
+                {
+                    UserName = appointmentDto.OrganiserEmail,
+                    Email = appointmentDto.OrganiserEmail,
+                    FirstName = "Unknown",
+                    LastName = "Unknown",
+                    Organisation = "Unknown",
+                    IsPlaceholder = true
+                };
+
+                var result = await _userManager.CreateAsync(placeholderUser);
+                if (!result.Succeeded)
+                {
+                    var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                    throw new InvalidOperationException($"Failed to create placeholder user: {errorMessages}");
+                }
+
+                user = await _userManager.FindByEmailAsync(appointmentDto.OrganiserEmail);
+
+            } else {
+
                 return NotFound("OrganiserId not found.");
             }
 

@@ -9,5 +9,6 @@
         public string Location { get; set; }
         public string OrganiserEmail { get; set; }
         public List<AppointmentUserModel> ListAttendees { get; set; }
+        public bool isGuest { get; set; } = false;
     }
 }
